@@ -465,6 +465,12 @@ LINUX_FIRMWARE_FILES += \
 	brcm/brcmfmac43569.bin brcm/brcmfmac43570-pcie.bin \
 	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin
 LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+
+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX_AP6212),y)
+LINUX_FIRMWARE_FILES += \
+	brcm/brcmfmac43430-sdio.AP6212.txt
+endif
+
 endif
 
 # ql2xxx
