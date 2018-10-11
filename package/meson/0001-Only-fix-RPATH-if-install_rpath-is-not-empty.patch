@@ -1,0 +1,46 @@
+From bf2c1c264085e0570f2f47e2bc883b73105252a4 Mon Sep 17 00:00:00 2001
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Thu, 11 Oct 2018 20:57:10 +0900
+Subject: [PATCH] Only fix RPATH if install_rpath is not empty
+
+---
+ mesonbuild/minstall.py | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
+index 4615b6dd..171a568c 100644
+--- a/mesonbuild/minstall.py
++++ b/mesonbuild/minstall.py
+@@ -437,15 +437,20 @@ class Installer:
+                               "Skipping all symlinking.")
+                         printed_symlink_error = True
+             if os.path.isfile(outname):
+-                try:
+-                    depfixer.fix_rpath(outname, install_rpath, final_path,
+-                                       install_name_mappings, verbose=False)
+-                except SystemExit as e:
+-                    if isinstance(e.code, int) and e.code == 0:
+-                        pass
+-                    else:
+-                        raise
+-
++                # Buildroot check-host-rpath script expects RPATH
++                # But if install_rpath is empty, it will stripped.
++                # So, preserve it in this case
++                if install_rpath:
++                    try:
++                        depfixer.fix_rpath(outname, install_rpath, final_path,
++                                           install_name_mappings, verbose=False)
++                    except SystemExit as e:
++                        if isinstance(e.code, int) and e.code == 0:
++                            pass
++                        else:
++                            raise
++                else:
++                    print("Skipping RPATH fixing")
+ def run(args):
+     parser = buildparser()
+     opts = parser.parse_args(args)
+-- 
+2.19.1
+
