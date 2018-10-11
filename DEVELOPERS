@@ -71,6 +71,7 @@ F:	package/webkitgtk/
 F:	package/woff2/
 
 N:	Adrien Gallouët <adrien@gallouet.fr>
+F:	package/bird/
 F:	package/glorytun/
 
 N:	Aleksander Morgado <aleksander@aleksander.es>
@@ -214,13 +215,16 @@ F:	package/python-logbook/
 F:	package/python-lxml/
 F:	package/python-paramiko/
 F:	package/python-passlib/
+F:	package/python-ply/
 F:	package/python-priority/
 F:	package/python-pyasn1/
 F:	package/python-pyasn1-modules/
+F:	package/python-pycryptodomex/
 F:	package/python-pyhamcrest/
 F:	package/python-pyopenssl/
 F:	package/python-pyqrcode/
 F:	package/python-pyroute2/
+F:	package/python-pysmi/
 F:	package/python-pytz/
 F:	package/python-reentry/
 F:	package/python-sdnotify/
@@ -404,6 +408,7 @@ F:	package/python-slob/
 F:	package/rtmpdump/
 F:	package/samba4/
 F:	package/softether/
+F:	package/spandsp/
 F:	package/sqlite/
 F:	package/taglib/
 F:	package/tinyxml2/
@@ -903,6 +908,7 @@ F:	package/leptonica/
 F:	package/ocrad/
 F:	package/tesseract-ocr/
 F:	package/webp/
+F:	package/xapian/
 
 N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
 F:	package/sunxi-mali-mainline/
@@ -918,8 +924,10 @@ F:	package/libwebsock/
 F:	package/sofia-sip/
 
 N:	Grzegorz Blach <grzegorz@blach.pl>
+F:	package/pigpio/
 F:	package/python-falcon/
 F:	package/python-mimeparse/
+F:	package/python-pigpio/
 
 N:	Guillaume Gardet <guillaume.gardet@oliseo.fr>
 F:	package/c-icap/
@@ -1066,6 +1074,7 @@ N:	Joel Carlson <JoelsonCarl@gmail.com>
 F:	package/capnproto/
 F:	package/cmocka/
 F:	package/flatcc/
+F:	package/libcorrect/
 
 N:	Joel Stanley <joel@jms.id.au>
 F:	package/pdbg/
@@ -1810,6 +1819,7 @@ F:	package/supertuxkart/
 F:	package/terminology/
 F:	package/tk/
 F:	package/upower/
+F:	package/waffle/
 F:	package/xenomai/
 
 N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>

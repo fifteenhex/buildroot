@@ -484,6 +484,8 @@ use HTTP::Tiny;
 use Safe;
 use MetaCPAN::API::Tiny;
 use Digest::SHA qw(sha256_hex);
+use Text::Wrap;
+$Text::Wrap::columns = 62;
 
 # Below, 5.026 should be aligned with the version of perl actually
 # bundled in Buildroot:
@@ -686,7 +688,8 @@ while (my ($distname, $dist) = each %dist) {
     my $brname = brname( $fsname );
     mkdir $dirname unless -d $dirname;
     if ($need_target{$distname} && ($force || !-f $cfgname)) {
-        my $abstract = $dist->{abstract};
+        $dist->{abstract} =~ s|\s+$||;
+        my $abstract = wrap( q{}, qq{\t  }, $dist->{abstract} );
         my $homepage = $dist->{resources}->{homepage} || qq{https://metacpan.org/release/${distname}};
         say qq{write ${cfgname}} unless $quiet;
         open my $fh, q{>}, $cfgname;
@@ -695,7 +698,7 @@ while (my ($distname, $dist) = each %dist) {
         say {$fh} qq{\tdepends on !BR2_STATIC_LIBS} if $need_dlopen{$distname};
         foreach my $dep (sort @{$deps_runtime{$distname}}) {
             my $brdep = brname( fsname( $dep ) );
-            say {$fh} qq{\tselect BR2_PACKAGE_${brdep}};
+            say {$fh} qq{\tselect BR2_PACKAGE_${brdep} # runtime};
         }
         say {$fh} qq{\thelp};
         say {$fh} qq{\t  ${abstract}\n} if $abstract;
@@ -714,14 +717,17 @@ while (my ($distname, $dist) = each %dist) {
         # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
         my ($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
         $directories =~ s|/$||;
-        my $dependencies = join q{ }, map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
-                                      map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
-        my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } sort( @{$deps_build{$distname}},
-                                                                                  @{$deps_runtime{$distname}} );
+        my @dependencies = map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} );
+        my $dependencies = join qq{ \\\n\t}, @dependencies;
+        $dependencies = qq{\\\n\t} . $dependencies if scalar @dependencies > 1;
+        my @host_dependencies = map { q{host-} . fsname( $_ ); } sort( @{$deps_build{$distname}},
+                                                                       @{$deps_runtime{$distname}} );
+        my $host_dependencies = join qq{ \\\n\t}, @host_dependencies;
+        $host_dependencies = qq{\\\n\t} . $host_dependencies if scalar @host_dependencies > 1;
         my $license = brlicense( ref $dist->{license} eq 'ARRAY'
                                ? join q{ or }, @{$dist->{license}}
                                : $dist->{license} );
-        my $license_files = join q{ }, keys %{$license_files{$distname}};
+        my $license_files = join q{ }, sort keys %{$license_files{$distname}};
         if ($license_files && (!$license || $license eq q{unknown})) {
             push @info, qq{[$distname] undefined LICENSE, see $license_files};
             $license = q{???};
@@ -764,10 +770,12 @@ while (my ($distname, $dist) = each %dist) {
         say {$fh} qq{# retrieved by scancpan from ${mirror}/};
         say {$fh} qq{md5    ${md5} ${filename}};
         say {$fh} qq{sha256 ${sha256} ${filename}};
-        if (scalar keys %{$license_files{$distname}}) {
+        my %license_files =  %{$license_files{$distname}};
+        if (scalar keys %license_files) {
             say {$fh} q{};
             say {$fh} qq{# computed by scancpan};
-            while (my ($license, $digest) = each %{$license_files{$distname}}) {
+            foreach my $license (sort keys %license_files) {
+                my $digest = $license_files{$license};
                 say {$fh} qq{sha256 ${digest} ${license}};
             }
         }
