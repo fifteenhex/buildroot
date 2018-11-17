@@ -10,7 +10,7 @@ PIDFILE=/var/run/$NAME.pid
 
 start() {
         printf "Starting $NAME: "
-        start-stop-daemon -S -q -p $PIDFILE --exec $DAEMON -- -P $PIDFILE $DEVICES && echo "OK" || echo "Failed"
+        start-stop-daemon -S -q -p $PIDFILE --exec $DAEMON -- -n -P $PIDFILE $DEVICES && echo "OK" || echo "Failed"
 }
 stop() {
         printf "Stopping $NAME: "
