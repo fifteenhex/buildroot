@@ -5,7 +5,7 @@
 ################################################################################
 
 VALGRIND_VERSION = 3.14.0
-VALGRIND_SITE = ftp://sourceware.org/pub/valgrind
+VALGRIND_SITE = http://sourceware.org/pub/valgrind
 VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
 VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
 VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
