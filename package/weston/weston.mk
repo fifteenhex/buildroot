@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WESTON_VERSION = 4.0.0
+WESTON_VERSION = 5.0.0
 WESTON_SITE = http://wayland.freedesktop.org/releases
 WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
 WESTON_LICENSE = MIT
@@ -50,20 +50,14 @@ else
 WESTON_CONF_OPTS += --disable-weston-launch
 endif
 
-ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND),y)
+ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGLES),yy)
 WESTON_CONF_OPTS += --enable-egl
-WESTON_DEPENDENCIES += libegl
+WESTON_DEPENDENCIES += libegl libgles
 else
 WESTON_CONF_OPTS += \
 	--disable-egl \
 	--disable-simple-dmabuf-drm-client \
 	--disable-simple-egl-clients
-endif
-
-ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-WESTON_DEPENDENCIES += libunwind
-else
-WESTON_CONF_OPTS += --disable-libunwind
 endif
 
 ifeq ($(BR2_PACKAGE_WESTON_RDP),y)

@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LIBV4L_VERSION = 1.16.1
+LIBV4L_VERSION = 1.16.2
 LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
 LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
 LIBV4L_INSTALL_STAGING = YES
@@ -45,6 +45,7 @@ LIBV4L_DEPENDENCIES += libgl
 endif
 
 ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+LIBV4L_CONF_OPTS += --with-udevdir=/usr/lib/udev
 LIBV4L_DEPENDENCIES += udev
 endif
 
@@ -56,8 +57,9 @@ ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
 LIBV4L_CONF_OPTS += --enable-v4l-utils
 LIBV4L_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
 
-# Disable clang that is used to build BPF (in-kernel bytecode machine) protocols
-LIBV4L_CONF_ENV += ac_cv_prog_CLANG=""
+# IR BPF decoder support needs toolchain with linux-headers >= 3.18
+# libelf and clang support
+LIBV4L_CONF_OPTS += --disable-bpf
 
 ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
 LIBV4L_CONF_OPTS += --enable-qv4l2

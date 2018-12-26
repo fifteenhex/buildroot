@@ -107,7 +107,7 @@ WIRESHARK_CONF_OPTS += --without-libxml2
 endif
 
 # no support for lua53 yet
-ifeq ($(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUA_5_2),y)
+ifeq ($(BR2_PACKAGE_LUA_5_1),y)
 WIRESHARK_CONF_OPTS += --with-lua
 WIRESHARK_DEPENDENCIES += lua
 else
@@ -138,6 +138,9 @@ endif
 ifeq ($(BR2_PACKAGE_SNAPPY),y)
 WIRESHARK_CONF_OPTS += --with-snappy=$(STAGING_DIR)/usr
 WIRESHARK_DEPENDENCIES += snappy
+ifeq ($(BR2_STATIC_LIBS),y)
+WIRESHARK_CONF_ENV += LIBS=-lstdc++
+endif
 else
 WIRESHARK_CONF_OPTS += --without-snappy
 endif

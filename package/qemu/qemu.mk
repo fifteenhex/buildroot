@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-QEMU_VERSION = 2.12.1
+QEMU_VERSION = 3.1.0
 QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
 QEMU_SITE = http://download.qemu.org
 QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
@@ -81,6 +81,13 @@ else
 QEMU_OPTS += --disable-tools
 endif
 
+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+QEMU_OPTS += --enable-seccomp
+QEMU_DEPENDENCIES += libseccomp
+else
+QEMU_OPTS += --disable-seccomp
+endif
+
 ifeq ($(BR2_PACKAGE_LIBSSH2),y)
 QEMU_OPTS += --enable-libssh2
 QEMU_DEPENDENCIES += libssh2
@@ -121,7 +128,6 @@ define QEMU_CONFIGURE_CMDS
 			--disable-libiscsi \
 			--disable-usb-redir \
 			--disable-strip \
-			--disable-seccomp \
 			--disable-sparse \
 			--disable-mpath \
 			--disable-sanitizers \
@@ -252,6 +258,10 @@ endif # BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
 ifeq ($(BR2_PACKAGE_HOST_QEMU_VDE2),y)
 HOST_QEMU_OPTS += --enable-vde
 HOST_QEMU_DEPENDENCIES += host-vde2
+endif
+
+ifdef ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
+HOST_QEMU_OPTS += --enable-virtfs
 endif
 
 # Override CPP, as it expects to be able to call it like it'd

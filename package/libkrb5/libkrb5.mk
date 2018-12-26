@@ -5,7 +5,7 @@
 ################################################################################
 
 LIBKRB5_VERSION_MAJOR = 1.16
-LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).1
+LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).2
 LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
 LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
 LIBKRB5_SUBDIR = src
@@ -52,14 +52,7 @@ else
 LIBKRB5_CONF_OPTS += --without-readline
 endif
 
-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-# gcc on riscv doesn't define _REENTRANT when -pthread is passed while
-# it should. Compensate this deficiency here otherwise libkrb5 configure
-# script doesn't find that thread support is enabled.
-ifeq ($(BR2_riscv),y)
-LIBKRB5_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_REENTRANT"
-endif
-else
+ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 LIBKRB5_CONF_OPTS += --disable-thread-support
 endif
 
