@@ -17,4 +17,9 @@ JSON_GLIB_DEPENDENCIES = \
 	host-pkgconf \
 	libglib2
 
+HOST_JSON_GLIB_DEPENDENCIES = \
+        host-pkgconf \
+        host-libglib2
+
 $(eval $(meson-package))
+$(eval $(host-meson-package))

@@ -455,16 +455,30 @@ endif
 
 # brcm43xxx
 ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX),y)
+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+
+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX_BCM43430_SDIO), y)
+LINUX_FIRMWARE_FILES += brcm/brcmfmac43430-sdio.bin
+
+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX_BCM43430_SDIO_AP6212),y)
+LINUX_FIRMWARE_FILES += \
+	brcm/brcmfmac43430-sdio.AP6212.txt
+endif
+
+endif
+
+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX_OTHERS), y)
 LINUX_FIRMWARE_FILES += \
 	brcm/brcmfmac43143.bin brcm/brcmfmac43143-sdio.bin \
 	brcm/brcmfmac43236b.bin brcm/brcmfmac43241b0-sdio.bin \
 	brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43241b5-sdio.bin \
 	brcm/brcmfmac43242a.bin brcm/brcmfmac43340-sdio.bin \
-	brcm/brcmfmac43362-sdio.bin brcm/brcmfmac43430-sdio.bin \
+	brcm/brcmfmac43362-sdio.bin \
 	brcm/brcmfmac43430a0-sdio.bin brcm/brcmfmac43455-sdio.bin \
 	brcm/brcmfmac43569.bin brcm/brcmfmac43570-pcie.bin \
 	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin
-LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+endif
+
 endif
 
 # ql2xxx
@@ -539,5 +553,11 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
 	$(LINUX_FIRMWARE_INSTALL_FILES)
 	$(LINUX_FIRMWARE_INSTALL_DIRS)
 endef
+
+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX_BCM43430_SDIO_AP6212),y)
+	LINUX_FIRMWARE_INSTALL_TARGET_CMDS += \
+		rm -f $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.txt; \
+		ln -s brcmfmac43430-sdio.AP6212.txt $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.txt
+endif
 
 $(eval $(generic-package))

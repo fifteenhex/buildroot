@@ -26,3 +26,4 @@ NETTLE_CONF_OPTS += --disable-arm-neon
 endif
 
 $(eval $(autotools-package))
+$(eval $(host-autotools-package))
