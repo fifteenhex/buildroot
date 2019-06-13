@@ -4,3 +4,10 @@ config BR2_PACKAGE_PYTHON_NETIFACES
 	  Portable access to network interfaces from Python.
 
 	  http://alastairs-place.net/projects/netifaces
+
+config BR2_PACKAGE_HOST_PYTHON_NETIFACES
+	bool "python-netifaces"
+	help
+	  Portable access to network interfaces from Python.
+
+	  http://alastairs-place.net/projects/netifaces
