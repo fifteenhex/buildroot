@@ -22,3 +22,7 @@ config BR2_PACKAGE_FLASHROM
 	  programmer devices.
 
 	  http://flashrom.org/
+
+config BR2_PACKAGE_FLASHROM_MSTAR
+	bool "mstar i2c support"
+	depends on BR2_PACKAGE_FLASHROM
