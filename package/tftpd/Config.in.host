@@ -1,0 +1,7 @@
+config BR2_PACKAGE_HOST_TFTPD
+        bool "host tftpd"
+        help
+	  HPA's Trivial File Transfer Protocol (tftp) server.
+
+	  https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
+
