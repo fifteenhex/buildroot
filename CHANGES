@@ -1,3 +1,200 @@
+2021.05, released June 6th, 2021
+
+	Various fixes.
+
+	Disable PIC/PIE support for Nios2 because of glibc issues
+
+	Defconfigs: Minnowboard max: Fix X11 and mesa3d configuration
+
+	Updated/fixed packages: apache, beaglev-ddrinit,
+	beaglev-secondboot, capnproto, dc3dd, directfb, efibootmgr,
+	ffmpeg, gptfdisk, go, gupnp, hostapd, iftop,
+	intel-mediadriver, libcamera, libcutl, libesmtp, libkcapi,
+	libraw, lttng-tools, lvm2, mimic, mono-gtksharp3, mpv,
+	netperf, odb, qt5base, uclibc, uftrace, unscd, vlc,
+	xdriver_xf86-video-fbturbo
+
+	New packages: python3-cffi, python3-cryptography, python3-pip,
+	python3-pycparser, python3-six
+
+2021.05-rc3, released May 31th, 2021
+
+	Fixes all over the tree.
+
+	meson: Explicitly disable PIE support (b_pie) as it is handled
+	by the toolchain wrapper.
+
+	Updated/fixed packages: boost, dhcp, expat, gdb, hwloc, imagemagick,
+	libcurl, libopenh264, llvm, lz4, mpv, nginx, paho-mqtt-c, pifmrds,
+	pipewire, python-bluezero, python-pillow, qemu, strace, uhd, vlc,
+	webkitgtk
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#13821: Wrong url for libnfsidmap package
+
+2021.05-rc2, released May 22th, 2021
+
+	Fixes all over the tree.
+
+	support/scripts/gen-missing-cpe: A script to query the list of
+	CPE IDs for the packages enabled in the current configuration and:
+
+	- for CPE IDs that do not have any matching entry in the CPE
+	  database, it emits a warning
+
+	- for CPE IDs that do have a matching entry, but not with the same
+	  version, it generates a snippet of XML that can be used to propose
+	  an updated version to NIST.
+
+	CPE meta data has been added for a large number of packages
+
+	Updated/fixed packages: assimp, binutils, bitcoin, bullet,
+	cutelyst, dhcp, dmalloc, docker-engine, ebtables,
+	environment-setup, flatcc, gcc, gd, gerbera, hostapd,
+	imx-gpu-viv, intel-microcode, jquery-validation, libdrm,
+	libgeos, libraw, libtirpc, libxml2, libxslt, live555, lmbench,
+	localedef, lvm2, mender, mender-grubenv, modem-manager, mutt,
+	opensbi, openssh, opentyrian, pipewire, postgis, postgresql,
+	prosody, python-bluezero, python-falcon, redis, rocksdb,
+	rt-tests, runc, vlc, waylandpp, webkitgtk, wireshark,
+	wpa_supplicant, wpewebkit, xlib_libX11, xterm
+
+	New packages: jh71xx-tools
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#13781: isc dhcp-server package don't create file /usr/bin/dhcpd
+	#13801: toolchainfile.cmake CMAKE_BUILD_TYPE
+	#13806: Building host-localedef fails on fedora 34/gcc 11
+
+2021.05-rc1, released May 12th, 2021
+
+	Fixes all over the tree and new features.
+
+	FORTIFY_SOURCE, PIC/PIE, RELRO and SSP security hardening
+	options are now enabled by default.
+
+	Dependencies: Explicitly detect and bail out if PATH contains
+	spaces or tabs. A number of packages fail to build in such
+	setups, so explicitly inform about this.
+
+	Infrastructure: Expose CONFIG_DIR to post-build/post-image
+	scripts, so they can call the Buildroot Makefile in the
+	correct directory for both in-tree / out-of-tree builds.
+
+	CMake infrastructure: Use CMAKE_EXE_LINKER_FLAGS rather than
+	CMAKE_CXX_FLAGS to link with libatomic to fix an compatibility
+	issue with poppler. Bump minimal host cmake version to 3.16
+	(from 3.15) to fix a compatibility issue with domoticz.
+
+	Meson: Use correct C++ host compiler (rather than C compiler)
+
+	utils/scanpypi: Explicitly use python3 for compatibility with
+	packages using python3 syntax in setup.py
+
+	support/download: Fix tarball generation (from git/svn repos)
+	including symlinks pointing to ./<something>. Fix svn download
+	for <1.9 clients or repos using CVS-style keywords.
+
+	support/scripts/cve.py: Use the (significantly) faster yajl2
+	ijson backend for older (< 2.5) ijson versions rather than the
+	slow python default, speeding up pkg-stats by ~2x.
+
+	Toolchain: Add logic to work around binutils bug 21464
+	(affecting OpenRISC), bug 27597 (affecting Nios II) and drop
+	the now longer applicable bug 19615 / 20006 handling.
+
+	Python{,3}: Fix byte compiling python files with short (single
+	character before .py) file names.
+
+	CPE meta data has been added for a large number of packages
+
+	New defconfigs: Acme Systems Acqua A5 (256/512MB), Beagleboard
+	BeagleV, Boundary devices Nitrogen8M Plus SOM, NXP i.MX 8M
+	Plus EVK, QEMU PPC e500mc
+
+	New packages: beaglev-ddrinit, beaglev-secondboot, janet,
+	kodi-inputstream-ffmpegdirect, kodi-vfs-libarchive,
+	kodi-visualisation-matrix, libxcrypt, libqrtr-glib, log4qt,
+	mawk, perl-parse-yapp, postgis, protozero, python-flask-wtf,
+	python-iwlib, python-semantic-version, python-setuptools-rust,
+	python-toml, riscv64-elf-toolchain, siproxyd, uftrace, zfs
+
+	Removed packages: iostat, kodi-platform,
+	kodi-screensaver-crystalmorph, monkey
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#13271: systemd-resolved: /etc/resolv.conf link broken on per-pa..
+	#13516: utils/scanpypi: Failure when parsing diffoscope
+	#13551: 2021.02.rc2: Unicode not work on qt 5.15.2
+	#13576: Issues compiling buildroot for 5x86
+	#13601: Gen image :Iappropriate ioctl error
+	#13616: tar file from git repository generation issue
+	#13631: Commit 54d3d94b6e breaks packages with git download method
+	#13641: glibc on raspberrypi
+	#13646: Gen image version 14 error : no sub -section title/..
+	#13651: pkg-golang cannot build when main.go is in the root
+	#13661: host-python2 build fails on aarch64
+	#13671: openSSH server closes connection before authentication..
+	#13721: c-stack.c:55:26: error: missing binary operator before ..
+	#13731: Readline Patch is missing Author Information
+	#13741: genext2fs does not allow to set perms of root node
+	#13751: libopenssl (static): huge drop in performance in newer ..
+	#13771: package htop has undeclared dependency on host python
+
+2021.02.2, released May 12th, 2021
+
+	Important / security related fixes.
+
+	Toolchain: Add logic to mark toolchains affected by binutils
+	bug 27597 (Nios II).
+
+	support/scripts/cve.py: Use the (significantly) faster yajl2
+	ijson backend for older (< 2.5) ijson versions rather than the
+	slow python default, speeding up pkg-stats by ~2x.
+
+	CMake infrastructure: Use CMAKE_EXE_LINKER_FLAGS rather than
+	CMAKE_CXX_FLAGS to link with libatomic to fix an compatibility
+	issue with poppler.
+
+	Infrastructure: Expose CONFIG_DIR to post-build/post-image
+	scripts, so they can call the Buildroot Makefile in the
+	correct directory for both in-tree / out-of-tree builds.
+
+	Updated/fixed packages: at91bootstrap, avahi, bash, bind,
+	bridge-utils, boost, cegui, cifs-utils, clamav, cmake,
+	coremark-pro, coreutils, cryptsetup, dmalloc, dnsmasq,
+	docker-cli, docker-engine, domoticz, efl, exim, ffmpeg, flex,
+	gcc, genext2fs, go, gst1-interpipe, haproxy, hostapd,
+	i2c-tools, imx-vpu, kexec, kf5-kcoreaddons, kismet, libcamera,
+	libcurl, libdrm, libfreefare, libfuse3, libgeos, libgpiod,
+	libnpupnp, libopenssl, libp11, librsync, libtomcrypt, libupnp,
+	localedef, lvm2, lxc, m4, makedevs, mender, mesa3d,
+	mesa3d-headers, mkpasswd, mkpimage, modem-manager, monkey,
+	mpd, ncurses, nettle, network-manager, nginx, numactl,
+	openjdk, openjdk-bin, openldap, openvpn, php, pipewire,
+	python-aioconsole, python-asgiref, python-botocore,
+	python-django, python-dnspython, python-flup, python-httplib2,
+	python-markdown2, python-mbrstrdecoder, python3, quickjs,
+	readline, rsyslog, ruby, rust, samba4, sconeserver, snort,
+	sox, systemd, tar, timescaledb, tio, tor, usb_modeswitch,
+	wpa_supplicant, xdriver_xf86-video-ati, xen, xlib_libXaw,
+	xserver_xorg-server
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#13271: systemd-resolved: /etc/resolv.conf link broken on per-pa..
+	#13551: 2021.02.rc2: Unicode not work on qt 5.15.2
+	#13651: pkg-golang cannot build when main.go is in the root
+	#13661: host-python2 build fails on aarch64
+	#13721: c-stack.c:55:26: error: missing binary operator before ..
+	#13731: Readline Patch is missing Author Information
+	#13741: genext2fs does not allow to set perms of root node
+	#13751: libopenssl (static): huge drop in performance in newer ..
+	#13771: package htop has undeclared dependency on host python
+
 2021.02.1, released April 7, 2021
 
 	Important / security related fixes.
