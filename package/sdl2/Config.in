@@ -13,9 +13,9 @@ if BR2_PACKAGE_SDL2
 
 config BR2_PACKAGE_SDL2_DIRECTFB
 	bool "DirectFB video driver"
-	depends on BR2_PACKAGE_DIRECTFB
+	depends on BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_DIRECTFB2
 
-comment "DirectFB video driver needs directfb"
+comment "DirectFB video driver needs directfb or directfb2"
 	depends on !BR2_PACKAGE_DIRECTFB
 
 config BR2_PACKAGE_SDL2_X11

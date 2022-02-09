@@ -57,7 +57,11 @@ SDL2_CONF_OPTS += --disable-3dnow
 endif
 
 ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
-SDL2_DEPENDENCIES += directfb
+ifeq ($(BR2_PACKAGE_DIRECTFB2),y)
+SDL2_DEPENDENCIES += directfb2
+else
+SDL2_DEPENDENCIES += directfb2
+endif
 SDL2_CONF_OPTS += --enable-video-directfb
 SDL2_CONF_ENV = ac_cv_path_DIRECTFBCONFIG=$(STAGING_DIR)/usr/bin/directfb-config
 else
