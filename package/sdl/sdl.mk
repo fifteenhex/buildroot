@@ -4,9 +4,9 @@
 #
 ################################################################################
 
-SDL_VERSION = 1.2.15
-SDL_SOURCE = SDL-$(SDL_VERSION).tar.gz
-SDL_SITE = http://www.libsdl.org/release
+SDL_VERSION = 707e2cc25904bd4ea7ca94f45632e02d7dbee14c
+SDL_SITE = https://github.com/libsdl-org/SDL-1.2.git
+SDL_SITE_METHOD = git
 SDL_LICENSE = LGPL-2.1+
 SDL_LICENSE_FILES = COPYING
 SDL_CPE_ID_VENDOR = libsdl
@@ -34,7 +34,11 @@ SDL_CONF_OPTS += --enable-video-fbcon=no
 endif
 
 ifeq ($(BR2_PACKAGE_SDL_DIRECTFB),y)
-SDL_DEPENDENCIES += directfb
+ifeq ($(BR2_PACKAGE_DIRECTFB2),y)
+SDL2_DEPENDENCIES += directfb2
+else
+SDL2_DEPENDENCIES += directfb2
+endif
 SDL_CONF_OPTS += --enable-video-directfb=yes
 SDL_CONF_ENV = ac_cv_path_DIRECTFBCONFIG=$(STAGING_DIR)/usr/bin/directfb-config
 else

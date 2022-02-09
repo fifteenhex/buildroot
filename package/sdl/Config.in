@@ -15,7 +15,7 @@ config BR2_PACKAGE_SDL_FBCON
 
 config BR2_PACKAGE_SDL_DIRECTFB
 	bool "SDL DirectFB video driver"
-	depends on BR2_PACKAGE_DIRECTFB
+	depends on BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_DIRECTFB2
 
 config BR2_PACKAGE_SDL_X11
 	bool "SDL X11 video driver"
