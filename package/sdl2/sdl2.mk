@@ -162,4 +162,13 @@ else
 SDL2_CONF_OPTS += --disable-video-kmsdrm
 endif
 
+# Build with LTO. This increases the code size a lot!
+# but the cpu usage when running chocolate-doom is reduced
+# from ~73% to ~62%.
+ifeq ($(BR2_GCC_ENABLE_LTO),y)
+SDL2_CFLAGS += -flto
+endif
+
+SDL2_CONF_ENV += CFLAGS="$(SDL2_CFLAGS)"
+
 $(eval $(autotools-package))
