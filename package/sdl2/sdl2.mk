@@ -162,6 +162,12 @@ else
 SDL2_CONF_OPTS += --disable-video-kmsdrm
 endif
 
+ifeq ($(BR2_PACKAGE_SDL2_EVENTS),y)
+SDL2_CONF_OPTS += --enable-events
+else
+SDL2_CONF_OPTS += --disable-events
+endif
+
 # Build with LTO. This increases the code size a lot!
 # but the cpu usage when running chocolate-doom is reduced
 # from ~73% to ~62%.
