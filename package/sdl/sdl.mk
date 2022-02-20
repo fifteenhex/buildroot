@@ -39,10 +39,10 @@ SDL2_DEPENDENCIES += directfb2
 else
 SDL2_DEPENDENCIES += directfb2
 endif
-SDL_CONF_OPTS += --enable-video-directfb=yes
+SDL_CONF_OPTS += --enable-video-directfb
 SDL_CONF_ENV = ac_cv_path_DIRECTFBCONFIG=$(STAGING_DIR)/usr/bin/directfb-config
 else
-SDL_CONF_OPTS += --enable-video-directfb=no
+SDL_CONF_OPTS += --disable-video-directfb
 endif
 
 ifeq ($(BR2_PACKAGE_SDL_X11),y)
@@ -86,6 +86,7 @@ SDL_CONF_OPTS += \
 	--disable-arts \
 	--disable-esd \
 	--disable-nasm \
+	--disable-cdrom \
 	--disable-video-ps3
 
 HOST_SDL_CONF_OPTS += \

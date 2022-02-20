@@ -16,7 +16,7 @@ config BR2_PACKAGE_SDL2_DIRECTFB
 	depends on BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_DIRECTFB2
 
 comment "DirectFB video driver needs directfb or directfb2"
-	depends on !BR2_PACKAGE_DIRECTFB
+	depends on !(BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_DIRECTFB2)
 
 config BR2_PACKAGE_SDL2_X11
 	bool "X11 video driver"
@@ -60,6 +60,14 @@ comment "OpenGL ES support needs an OpenGL ES provider"
 
 config BR2_PACKAGE_SDL2_EVENTS
 	bool "Events subsystem"
+	default y
+
+config BR2_PACKAGE_SDL2_RENDER
+	bool "Render subsystem"
+	default y
+
+config BR2_PACKAGE_SDL2_JOYSTICK
+	bool "Joystick subsystem"
 	default y
 
 endif

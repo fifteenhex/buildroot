@@ -19,8 +19,21 @@ SDL2_CONF_OPTS += \
 	--disable-arts \
 	--disable-esd \
 	--disable-dbus \
+	--disable-diskaudio \
 	--disable-pulseaudio \
-	--disable-video-wayland
+	--disable-video-dummy \
+	--disable-video-wayland \
+	--disable-video-vulkan \
+	--disable-hidapi \
+	--disable-ime \
+	--disable-oss
+
+SDL2_CONF_OPTS += \
+	--enable-arm-simd
+
+SDL2_CONF_OPTS += \
+	--disable-joystick \
+	--disable-haptic
 
 # We are using autotools build system for sdl2, so the sdl2-config.cmake
 # include path are not resolved like for sdl2-config script.
@@ -56,16 +69,20 @@ else
 SDL2_CONF_OPTS += --disable-3dnow
 endif
 
+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+SDL2_CONF_OPTS += --enable-arm-neon
+endif
+
 ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
 ifeq ($(BR2_PACKAGE_DIRECTFB2),y)
 SDL2_DEPENDENCIES += directfb2
 else
 SDL2_DEPENDENCIES += directfb2
 endif
-SDL2_CONF_OPTS += --enable-video-directfb
+SDL2_CONF_OPTS += --enable-video-directfb --disable-directfb-shared
 SDL2_CONF_ENV = ac_cv_path_DIRECTFBCONFIG=$(STAGING_DIR)/usr/bin/directfb-config
 else
-SDL2_CONF_OPTS += --disable-video-directfb
+SDL2_CONF_OPTS += --disable-video-directfb --disable-directfb-shared
 endif
 
 ifeq ($(BR2_PACKAGE_SDL2_OPENGLES)$(BR2_PACKAGE_RPI_USERLAND),yy)
@@ -162,11 +179,55 @@ else
 SDL2_CONF_OPTS += --disable-video-kmsdrm
 endif
 
+ifeq ($(BR2_PACKAGE_SDL2_ATOMIC),y)
+SDL2_CONF_OPTS += --enable-atomic
+else
+SDL2_CONF_OPTS += --disable-atomic
+endif
+
+ifeq ($(BR2_PACKAGE_SDL2_POWER),y)
+SDL2_CONF_OPTS += --enable-power
+else
+SDL2_CONF_OPTS += --disable-power
+endif
+
+ifeq ($(BR2_PACKAGE_SDL2_RENDER),y)
+SDL2_CONF_OPTS += --enable-render
+else
+SDL2_CONF_OPTS += --disable-render
+endif
+
 ifeq ($(BR2_PACKAGE_SDL2_EVENTS),y)
 SDL2_CONF_OPTS += --enable-events
 else
 SDL2_CONF_OPTS += --disable-events
 endif
+
+ifeq ($(BR2_PACKAGE_SDL2_JOYSTICK),y)
+SDL2_CONF_OPTS += --enable-joystick
+else
+SDL2_CONF_OPTS += --disable-joystick
+endif
+
+ifeq ($(BR2_PACKAGE_SDL2_SENSOR),y)
+SDL2_CONF_OPTS += --enable-sensor
+else
+SDL2_CONF_OPTS += --disable-sensor
+endif
+
+ifeq ($(BR2_PACKAGE_SDL2_HAPTIC),y)
+SDL2_CONF_OPTS += --enable-haptic
+else
+SDL2_CONF_OPTS += --disable-haptic
+endif
+
+ifeq ($(BR2_PACKAGE_SDL2_CPUINFO),y)
+SDL2_CONF_OPTS += --enable-cpuinfo
+else
+SDL2_CONF_OPTS += --disable-cpuinfo
+endif
+
+SDL2_CFLAGS = -O3
 
 # Build with LTO. This increases the code size a lot!
 # but the cpu usage when running chocolate-doom is reduced
