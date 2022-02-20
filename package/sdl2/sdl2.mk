@@ -168,8 +168,10 @@ endif
 ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
 SDL2_DEPENDENCIES += alsa-lib
 SDL2_CONF_OPTS += --enable-alsa
+SDL2_CONF_OPTS += --disable-alsa-shared
 else
 SDL2_CONF_OPTS += --disable-alsa
+SDL2_CONF_OPTS += --disable-alsa-shared
 endif
 
 ifeq ($(BR2_PACKAGE_SDL2_KMSDRM),y)
