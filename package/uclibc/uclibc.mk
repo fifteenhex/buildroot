@@ -4,9 +4,10 @@
 #
 ################################################################################
 
-UCLIBC_VERSION = 1.0.45
-UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
-UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+UCLIBC_VERSION = 6351e7dd600bab176140fa9b74e67a10fbf8dd25
+#UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+UCLIBC_SITE = https://github.com/fifteenhex/uclibc-ng.git
+UCLIBC_SITE_METHOD = git
 UCLIBC_LICENSE = LGPL-2.1+
 UCLIBC_LICENSE_FILES = COPYING.LIB
 UCLIBC_INSTALL_STAGING = YES
