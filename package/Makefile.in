@@ -45,6 +45,8 @@ GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
 # the regular linux name.
 ifeq ($(BR2_BINFMT_FLAT):$(BR2_RISCV_64),y:)
 TARGET_OS = uclinux
+else ifeq ($(BR2_BINFMT_FDPIC),y)
+TARGET_OS = uclinux
 else
 TARGET_OS = linux
 endif
