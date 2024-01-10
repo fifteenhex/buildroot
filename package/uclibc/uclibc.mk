@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-UCLIBC_VERSION = 6351e7dd600bab176140fa9b74e67a10fbf8dd25
+UCLIBC_VERSION = 448e95c9e2e31e478048e242070650a2ee0bf77f
 #UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
 UCLIBC_SITE = https://github.com/fifteenhex/uclibc-ng.git
 UCLIBC_SITE_METHOD = git
