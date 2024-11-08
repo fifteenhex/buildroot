@@ -1,0 +1,47 @@
+From d1aedb97857a529d89a4e064de17105792929c14 Mon Sep 17 00:00:00 2001
+From: Mikael Pettersson <mikpelinux@gmail.com>
+Date: Sat, 30 Dec 2023 18:38:45 +0100
+Subject: [PATCH] 2023-12-29  Mikael Pettersson  <mikpelinux@gmail.com>
+
+	PR target/108640
+	* config/m68k/m68k.cc (output_andsi3): Use SImode for
+	address adjusted for 1-byte RMW access.
+	(output_iorsi3): Likewise.
+	(output_xorsi3): Likewise.
+---
+ gcc/config/m68k/m68k.cc | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/gcc/config/m68k/m68k.cc b/gcc/config/m68k/m68k.cc
+index 001cf5bd997..77614b484e3 100644
+--- a/gcc/config/m68k/m68k.cc
++++ b/gcc/config/m68k/m68k.cc
+@@ -5471,7 +5471,7 @@ output_andsi3 (rtx *operands)
+ 	operands[1] = GEN_INT (logval);
+       else
+         {
+-	  operands[0] = adjust_address (operands[0], SImode, 3 - (logval / 8));
++	  operands[0] = adjust_address (operands[0], QImode, 3 - (logval / 8));
+ 	  operands[1] = GEN_INT (logval % 8);
+         }
+       return "bclr %1,%0";
+@@ -5510,7 +5510,7 @@ output_iorsi3 (rtx *operands)
+ 	operands[1] = GEN_INT (logval);
+       else
+         {
+-	  operands[0] = adjust_address (operands[0], SImode, 3 - (logval / 8));
++	  operands[0] = adjust_address (operands[0], QImode, 3 - (logval / 8));
+ 	  operands[1] = GEN_INT (logval % 8);
+ 	}
+       return "bset %1,%0";
+@@ -5548,7 +5548,7 @@ output_xorsi3 (rtx *operands)
+ 	operands[1] = GEN_INT (logval);
+       else
+         {
+-	  operands[0] = adjust_address (operands[0], SImode, 3 - (logval / 8));
++	  operands[0] = adjust_address (operands[0], QImode, 3 - (logval / 8));
+ 	  operands[1] = GEN_INT (logval % 8);
+ 	}
+       return "bchg %1,%0";
+-- 
+2.43.0
