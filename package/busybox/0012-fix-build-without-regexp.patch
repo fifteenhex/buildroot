@@ -1,0 +1,20 @@
+Index: busybox-1.37.0/coreutils/test.c
+===================================================================
+--- busybox-1.37.0.orig/coreutils/test.c
++++ busybox-1.37.0/coreutils/test.c
+@@ -76,7 +76,6 @@
+ //usage:       "1\n"
+ 
+ #include "libbb.h"
+-#include <regex.h>
+ #include <fnmatch.h>
+ 
+ /* This is a NOFORK applet. Be very careful! */
+@@ -152,6 +151,7 @@
+  || (ENABLE_ASH_BASH_COMPAT && ENABLE_ASH_TEST) \
+  || (ENABLE_HUSH_BASH_COMPAT && ENABLE_HUSH_TEST)
+ # define BASH_TEST2 1
++#include <regex.h>
+ #else
+ # define BASH_TEST2 0
+ #endif
