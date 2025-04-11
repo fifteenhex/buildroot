@@ -16,10 +16,10 @@ BUSYBOX_CPE_ID_VENDOR = busybox
 BUSYBOX_IGNORE_CVES += CVE-2022-28391
 
 BUSYBOX_CFLAGS = \
-	$(TARGET_CFLAGS)
+	$(TARGET_CFLAGS) -ffunction-sections -fdata-sections -flto
 
 BUSYBOX_LDFLAGS = \
-	$(TARGET_LDFLAGS)
+	$(TARGET_LDFLAGS) -Wl,--gc-sections
 
 # Packages that provide commands that may also be busybox applets:
 BUSYBOX_DEPENDENCIES = \
