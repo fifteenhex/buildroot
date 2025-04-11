@@ -407,6 +407,10 @@ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
 UCLIBC_EXTRA_CFLAGS += -fno-lto
 endif
 
+# As we can't use LTO, use section GC to claw back some size
+UCLIBC_EXTRA_CFLAGS += -ffunction-sections -fdata-sections
+#-flto -ffat-lto-objects
+
 UCLIBC_MAKE_FLAGS = \
 	ARCH="$(UCLIBC_TARGET_ARCH)" \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
