@@ -1,8 +1,11 @@
 BR2_m68k=y
 BR2_m68k_68000=y
 BR2_BINFMT_FLAT_SEP_DATA=y
+BR2_KERNEL_HEADERS_6_12=y
 BR2_TOOLCHAIN_BUILDROOT_USE_SSP=y
 # BR2_UCLIBC_INSTALL_UTILS is not set
+BR2_TARGET_OPTIMIZATION="-flto -ffat-lto-objects"
+BR2_TARGET_LDFLAGS="-flto -ffat-lto-objects"
 BR2_CURL="curl -q --ftp-pasv --retry 3"
 BR2_WGET="wget -nd -t 3"
 BR2_SVN="svn --non-interactive"
@@ -10,8 +13,9 @@ BR2_SCP="scp"
 BR2_SFTP="sftp"
 BR2_GNU_MIRROR="http://ftpmirror.gnu.org"
 BR2_ENABLE_DEBUG=y
-BR2_ENABLE_RUNTIME_DEBUG=y
+BR2_OPTIMIZE_S=y
 BR2_ENABLE_LTO=y
+BR2_SSP_NONE=y
 BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-tiny.config"
 BR2_PACKAGE_MTD=y
 # BR2_PACKAGE_MTD_MTD_DEBUG is not set
