@@ -22,6 +22,10 @@ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_15),y)
 PRBOOM_CFLAGS += -std=gnu18
 endif
 
+ifeq ($(BR2_ENABLE_LTO),y)
+PRBOOM_CFLAGS += -flto
+endif
+
 PRBOOM_CONF_ENV += CFLAGS="$(PRBOOM_CFLAGS)"
 
 ifeq ($(BR2_PACKAGE_LIBPNG),y)
