@@ -1,0 +1,81 @@
+From 0ecca04c552d6f014d8e5d64799f83c11c905070 Mon Sep 17 00:00:00 2001
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Wed, 3 Dec 2025 09:40:37 +0900
+Subject: [PATCH] m68k: use vDSO to get thread area
+
+---
+ sysdeps/unix/sysv/linux/dl-vdso-setup.c     | 5 +++++
+ sysdeps/unix/sysv/linux/dl-vdso-setup.h     | 3 +++
+ sysdeps/unix/sysv/linux/m68k/m68k-helpers.c | 5 +++++
+ sysdeps/unix/sysv/linux/m68k/sysdep.h       | 6 ++++++
+ 4 files changed, 19 insertions(+)
+
+diff --git a/sysdeps/unix/sysv/linux/dl-vdso-setup.c b/sysdeps/unix/sysv/linux/dl-vdso-setup.c
+index cd9cadaca516..c05945b2f4b0 100644
+--- a/sysdeps/unix/sysv/linux/dl-vdso-setup.c
++++ b/sysdeps/unix/sysv/linux/dl-vdso-setup.c
+@@ -86,6 +86,11 @@ PROCINFO_CLASS int (*_dl_vdso_riscv_hwprobe)(void *,
+                                              unsigned int) RELRO;
+ # endif
+ 
++/* m68k */
++# ifdef HAVE_GET_THREAD_AREA_VSYSCALL
++PROCINFO_CLASS unsigned long (*_dl_vdso_get_thread_area)(void) RELRO;
++# endif
++
+ #endif
+ 
+ #undef RELRO
+diff --git a/sysdeps/unix/sysv/linux/dl-vdso-setup.h b/sysdeps/unix/sysv/linux/dl-vdso-setup.h
+index 6962bf82ef12..c60abdf3af08 100644
+--- a/sysdeps/unix/sysv/linux/dl-vdso-setup.h
++++ b/sysdeps/unix/sysv/linux/dl-vdso-setup.h
+@@ -53,6 +53,9 @@ setup_vdso_pointers (void)
+ #ifdef HAVE_GETRANDOM_VSYSCALL
+   GLRO(dl_vdso_getrandom) = dl_vdso_vsym (HAVE_GETRANDOM_VSYSCALL);
+ #endif
++#ifdef HAVE_GET_THREAD_AREA_VSYSCALL
++  GLRO(dl_vdso_get_thread_area) = dl_vdso_vsym (HAVE_GET_THREAD_AREA_VSYSCALL);
++#endif
+ }
+ 
+ #endif
+diff --git a/sysdeps/unix/sysv/linux/m68k/m68k-helpers.c b/sysdeps/unix/sysv/linux/m68k/m68k-helpers.c
+index 845aae513c3a..e810e9d46385 100644
+--- a/sysdeps/unix/sysv/linux/m68k/m68k-helpers.c
++++ b/sysdeps/unix/sysv/linux/m68k/m68k-helpers.c
+@@ -17,9 +17,14 @@
+    <https://www.gnu.org/licenses/>.  */
+ 
+ #include <sysdep.h>
++#include <sysdep-vdso.h>
+ 
+ void *
+ __m68k_read_tp (void)
+ {
++  unsigned long (*vdso_get_thread_area) (void) = GLRO(dl_vdso_get_thread_area);
++  if (vdso_get_thread_area != NULL)
++    return (void*) INTERNAL_VSYSCALL_CALL (vdso_get_thread_area, 0);
++
+   return (void*) INTERNAL_SYSCALL_CALL (get_thread_area);
+ }
+diff --git a/sysdeps/unix/sysv/linux/m68k/sysdep.h b/sysdeps/unix/sysv/linux/m68k/sysdep.h
+index 6f6b46e026d3..b68b75b13d09 100644
+--- a/sysdeps/unix/sysv/linux/m68k/sysdep.h
++++ b/sysdeps/unix/sysv/linux/m68k/sysdep.h
+@@ -293,6 +293,12 @@ SYSCALL_ERROR_LABEL:							      \
+ #undef HAVE_INTERNAL_BRK_ADDR_SYMBOL
+ #define HAVE_INTERNAL_BRK_ADDR_SYMBOL 1
+ 
++#define VDSO_NAME "LINUX_5.10"
++#define VDSO_HASH 182947696
++
++/* List of system calls which are supported as vsyscalls.  */
++#define HAVE_GET_THREAD_AREA_VSYSCALL "__vdso_get_thread_area"
++
+ #endif /* not __ASSEMBLER__ */
+ 
+ /* M68K needs system-supplied DSO to access TLS helpers
+-- 
+2.51.0
+
