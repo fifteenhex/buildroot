@@ -1,0 +1,21 @@
+From f7d42b5c00827c351cb3f516fc1c1606cd8c7283 Mon Sep 17 00:00:00 2001
+From: Daniel Palmer <daniel@thingy.jp>
+Date: Tue, 2 Dec 2025 23:26:52 +0900
+Subject: [PATCH 1/2] m68k: Enable vDSO support
+
+---
+ extra/Configs/Config.m68k | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/extra/Configs/Config.m68k b/extra/Configs/Config.m68k
+index 5888067bc..ed54d87b4 100644
+--- a/extra/Configs/Config.m68k
++++ b/extra/Configs/Config.m68k
+@@ -12,3 +12,4 @@ config FORCE_OPTIONS_FOR_ARCH
+ 	default y
+ 	select ARCH_BIG_ENDIAN
+ 	select ARCH_HAS_DEPRECATED_SYSCALLS
++	select ARCH_VDSO_SUPPORT
+-- 
+2.51.0
+

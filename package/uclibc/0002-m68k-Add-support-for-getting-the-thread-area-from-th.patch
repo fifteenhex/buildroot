@@ -1,0 +1,115 @@
+From 8bb1bec4e97da3f8594fb8bf9dadf8442a9ee7ac Mon Sep 17 00:00:00 2001
+From: Daniel Palmer <daniel@thingy.jp>
+Date: Wed, 3 Dec 2025 00:14:13 +0900
+Subject: [PATCH 2/2] m68k: Add support for getting the thread area from the
+ vdso
+
+Seems to work...
+---
+ ldso/ldso/dl-vdso-calls.h          |  5 ++++-
+ ldso/ldso/dl-vdso.c                | 21 ++++++++++++++++++++-
+ libpthread/nptl/sysdeps/m68k/tls.h | 21 +++++++++++++++++++--
+ 3 files changed, 43 insertions(+), 4 deletions(-)
+
+diff --git a/ldso/ldso/dl-vdso-calls.h b/ldso/ldso/dl-vdso-calls.h
+index c72f2dadf..53fbff268 100644
+--- a/ldso/ldso/dl-vdso-calls.h
++++ b/ldso/ldso/dl-vdso-calls.h
+@@ -65,4 +65,7 @@ static int __attribute__ ((used)) __generic_vdso_gettimeofday(struct timeval *tv
+     return __res;
+ }
+ 
+-#endif /* _DL_VDSO_CALLS_H */
+\ No newline at end of file
++typedef void* (*get_thread_area_func)(void);
++void __attribute__((weak)) *_get__dl__vdso_get_thread_area(void);
++
++#endif /* _DL_VDSO_CALLS_H */
+diff --git a/ldso/ldso/dl-vdso.c b/ldso/ldso/dl-vdso.c
+index 01309011d..78d9b4879 100755
+--- a/ldso/ldso/dl-vdso.c
++++ b/ldso/ldso/dl-vdso.c
+@@ -5,6 +5,7 @@
+ 
+ #define __ARCH_VDSO_GETTIMEOFDAY_NAME    "__vdso_gettimeofday"
+ #define __ARCH_VDSO_CLOCK_GETTIME_NAME   "__vdso_clock_gettime"
++#define __ARCH_VDSO_GET_THREAD_AREA      "__vdso_get_thread_area"
+ 
+ #if defined(__UCLIBC_USE_TIME64__)
+ #define __ARCH_VDSO_CLOCK_GETTIME64_NAME "__vdso_clock_gettime64"
+@@ -65,6 +66,13 @@ void *_get__dl__vdso_gettimeofday(void)
+     return _dl__vdso_gettimeofday;
+ }
+ 
++void *_dl__vdso_get_thread_area = 0;
++void *_get__dl__vdso_get_thread_area(void);
++void *_get__dl__vdso_get_thread_area(void)
++{
++    return _dl__vdso_get_thread_area;
++}
++
+ typedef struct {
+ 
+     void* base_addr;
+@@ -359,7 +367,18 @@ void load_vdso(void *sys_info_ehdr, char **envp ){
+             continue;
+         }
+ #endif  /* defined(__UCLIBC_USE_TIME64__) */
+-        
++
++        if ( 0 == _dl_strcmp( name, __ARCH_VDSO_GET_THREAD_AREA ) ){
++            _dl__vdso_get_thread_area = func_addr;
++#ifdef __SUPPORT_LD_DEBUG__
++            if ( _dl_debug_vdso != 0 ){
++                _dl_dprintf(2,"   %s at address %p\n", name, func_addr );
++            }
++#endif
++            continue;
++        }
++
++
+ #ifdef __SUPPORT_LD_DEBUG__
+         if ( _dl_debug_vdso != 0 ){
+             _dl_dprintf(2,"   <%s> not handled\n", name );
+diff --git a/libpthread/nptl/sysdeps/m68k/tls.h b/libpthread/nptl/sysdeps/m68k/tls.h
+index 213442da4..97b3567e7 100644
+--- a/libpthread/nptl/sysdeps/m68k/tls.h
++++ b/libpthread/nptl/sysdeps/m68k/tls.h
+@@ -122,15 +122,32 @@ typedef struct
+ # define TLS_DEFINE_INIT_TP(tp, pd) \
+   void *tp = (void *) (pd) + TLS_TCB_OFFSET + TLS_PRE_TCB_SIZE
+ 
++#if defined(__VDSO_SUPPORT__)
++typedef unsigned long (*_gtafunc)(void);
++extern void *_get__dl__vdso_get_thread_area(void);
++#endif
+ extern void * __m68k_read_tp (void);
+ 
++static inline void *_m68k_read_tp(void)
++{
++#if defined(__VDSO_SUPPORT__)
++	void *vdso_get_thread_area = _get__dl__vdso_get_thread_area();
++	if (vdso_get_thread_area) {
++		void *tp = (void*) ((_gtafunc)vdso_get_thread_area)();
++		return tp;
++	}
++	else
++#endif
++		return __m68k_read_tp();
++}
++
+ /* Return the address of the dtv for the current thread.  */
+ # define THREAD_DTV() \
+-  (((tcbhead_t *) (__m68k_read_tp () - TLS_TCB_OFFSET))[-1].dtv)
++  (((tcbhead_t *) (_m68k_read_tp() - TLS_TCB_OFFSET))[-1].dtv)
+ 
+ /* Return the thread descriptor for the current thread.  */
+ # define THREAD_SELF \
+-  ((struct pthread *) (__m68k_read_tp () - TLS_TCB_OFFSET - TLS_PRE_TCB_SIZE))
++  ((struct pthread *) (_m68k_read_tp() - TLS_TCB_OFFSET - TLS_PRE_TCB_SIZE))
+ 
+ /* Magic for libthread_db to know how to do THREAD_SELF.  */
+ # define DB_THREAD_SELF \
+-- 
+2.51.0
+
