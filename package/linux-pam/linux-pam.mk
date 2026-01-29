@@ -31,7 +31,7 @@ LINUX_PAM_CONF_OPTS += -Dselinux=enabled
 LINUX_PAM_DEPENDENCIES += libselinux
 define LINUX_PAM_SELINUX_PAMFILE_TWEAK
 	$(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
-		$(TARGET_DIR)/etc/pam.d/login
+		$(TARGET_DIR)/usr/lib/pam.d/login
 endef
 else
 LINUX_PAM_CONF_OPTS += -Dselinux=disabled
@@ -55,7 +55,7 @@ ifeq ($(BR2_PACKAGE_LINUX_PAM_LASTLOG),y)
 LINUX_PAM_CONF_OPTS += -Dpam_lastlog=enabled
 define LINUX_PAM_LASTLOG_PAMFILE_TWEAK
 	$(SED) 's/^# \(.*pam_lastlog.so.*\)$$/\1/' \
-		$(TARGET_DIR)/etc/pam.d/login
+		$(TARGET_DIR)/usr/lib/pam.d/login
 endef
 else
 LINUX_PAM_CONF_OPTS += -Dpam_lastlog=disabled
@@ -63,10 +63,10 @@ endif
 
 # Install default pam config (deny everything except login)
 define LINUX_PAM_INSTALL_CONFIG
-	$(INSTALL) -m 0644 -D package/linux-pam/login.pam \
-		$(TARGET_DIR)/etc/pam.d/login
-	$(INSTALL) -m 0644 -D package/linux-pam/other.pam \
-		$(TARGET_DIR)/etc/pam.d/other
+	$(INSTALL) -m 0644 -D $(LINUX_PAM_PKGDIR)/login.pam \
+		$(TARGET_DIR)/usr/lib/pam.d/login
+	$(INSTALL) -m 0644 -D $(LINUX_PAM_PKGDIR)/other.pam \
+		$(TARGET_DIR)/usr/lib/pam.d/other
 	$(LINUX_PAM_LASTLOG_PAMFILE_TWEAK)
 	$(LINUX_PAM_SELINUX_PAMFILE_TWEAK)
 endef
