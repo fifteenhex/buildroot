@@ -20,4 +20,14 @@ define UGETTY_INSTALL_TARGET_CMDS
 	ln -snf ugetty $(TARGET_DIR)/sbin/getty
 endef
 
+define HOST_UGETTY_BUILD_CMDS
+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) bin/proxycommand
+endef
+
+define HOST_UGETTY_INSTALL_CMDS
+	$(INSTALL) -m 0755 -D $(@D)/bin/proxycommand \
+		$(HOST_DIR)/bin/proxycommand
+endef
+
 $(eval $(generic-package))
+$(eval $(host-generic-package))
