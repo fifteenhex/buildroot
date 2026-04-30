@@ -1,8 +1,8 @@
 # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
-sha256  53591a03294527a48ccb0b9e559e922df8a38554745a1206827ca751d2ca7662  linux-7.0.2.tar.xz
+sha256  0bedadbf5788693ddebbcc913c893f1a97349af79ddde7144c2a80b401959f1c  linux-7.0.3.tar.xz
 
 # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-sha256  29680a07d4430b269af6ce68079b0e81dbd60f03e6f351e0661991fe39bd1898  linux-6.18.25.tar.xz
+sha256  53772f5d3776e043767c8d81a32240d1f3eb64e822a5d7a510b55ca40707b0ec  linux-6.18.26.tar.xz
 
 # Licenses hashes
 sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
