@@ -15,7 +15,7 @@ endef
 
 # Install ugetty->getty symlink to ensure ugetty is used
 define UGETTY_INSTALL_TARGET_CMDS
-	$(INSTALL) -m 0755 $(@D)/bin/ugetty \
+	$(INSTALL) -m 0755 -D $(@D)/bin/ugetty \
 		$(TARGET_DIR)/sbin/ugetty
 	ln -snf ugetty $(TARGET_DIR)/sbin/getty
 endef
